@@ -1,3 +1,5 @@
+import pandas as pd
+
 def clean_store_data(df):
     # drop old columns from sql database
     df = df.drop(columns = ["store_id","item_id","sale_id"])
