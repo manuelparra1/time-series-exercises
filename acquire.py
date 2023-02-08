@@ -1,3 +1,6 @@
+import pandas as pd
+import os
+
 def get_star_wars_api_url(info):
     # Star Wars API Root Directory Setup
     # root url (table of contents)
@@ -103,3 +106,25 @@ def get_energy():
     else:
         print(f"File {filename} already exists.")
     return energy_df
+
+def get_store_data():
+    filename = 'tsa_item_demand.csv'
+
+    if not os.path.exists(filename):
+        sql_db = "tsa_item_demand"
+        url = get_db_url(sql_db)
+        query = '''
+                select * 
+                from sales
+                left join items using(item_id)
+                left join stores using(store_id)
+                '''
+        df = pd.read_sql(query,url)
+        df.to_csv(filename, index=False)
+        print(f"Saving {filename}...")
+        
+        return df
+    else:
+        print(f"File {filename} already exists. Loading {filename}...")
+        
+        return pd.read_csv(filename,index_col=False)
